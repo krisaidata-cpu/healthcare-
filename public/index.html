@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AyurMetabolic | South Asian Metabolic & MASLD Health Platform</title>
+  <meta name="description" content="Precision metabolic health management tailored for South Asian genetics, MASLD risk prevention, and Type-2 Diabetes control.">
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Custom Glassmorphism Styling -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-background">
+    <div class="glow-orb orb-emerald"></div>
+    <div class="glow-orb orb-amber"></div>
+    <div class="glow-orb orb-crimson"></div>
+  </div>
+
+  <!-- Header Navbar -->
+  <header class="navbar">
+    <div class="logo-container">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <path d="M12 8v8"/>
+          <path d="M8 12h8"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <span class="brand-title">AYUR<span class="brand-highlight">METABOLIC</span></span>
+        <span class="brand-subtitle">South Asian MASLD & T2D Care</span>
+      </div>
+    </div>
+
+    <div class="nav-controls">
+      <div class="db-status-badge" id="dbStatusBadge">
+        <span class="status-dot"></span>
+        <span id="dbStatusText">Neon DB Connected</span>
+      </div>
+      <button class="btn btn-outline" id="onboardingBtn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <span id="userProfileBtnLabel">Register Baseline</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-layout">
+    <!-- Top Alert Banner for South Asian BMI Action Trigger -->
+    <div class="alert-banner hidden" id="southAsianAlertBanner">
+      <div class="alert-icon">⚠️</div>
+      <div class="alert-content">
+        <strong id="alertBannerTitle">South Asian Metabolic Risk Triggered!</strong>
+        <p id="alertBannerText">Your BMI is ≥ 23.0 kg/m². South Asian genetics confer higher visceral fat burden and insulin resistance at lower BMI thresholds.</p>
+      </div>
+      <button class="alert-close" onclick="document.getElementById('southAsianAlertBanner').classList.add('hidden')">✕</button>
+    </div>
+
+    <!-- Interactive Metabolic Streak & Quick Daily Stats Bar -->
+    <div class="streak-header-bar">
+      <div class="streak-item">
+        <span class="streak-icon">🔥</span>
+        <div>
+          <strong class="streak-val" id="streakDaysVal">7 Day Streak</strong>
+          <span class="streak-label">Metabolic Consistency</span>
+        </div>
+      </div>
+
+      <div class="streak-item">
+        <span class="streak-icon">🚶‍♂️</span>
+        <div>
+          <strong class="streak-val" id="dailyStepsVal">6,420 / 8,000</strong>
+          <span class="streak-label">Post-Meal Steps Today</span>
+        </div>
+      </div>
+
+      <div class="streak-item interactive-water-box">
+        <span class="streak-icon">💧</span>
+        <div>
+          <strong class="streak-val" id="waterIntakeVal">2.25 L / 3.0 L</strong>
+          <span class="streak-label">Daily Hydration</span>
+        </div>
+        <button class="btn-water-add" id="addWaterBtn" title="Quick Add 250ml Water">+250ml</button>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+      <button class="tab-btn active" data-tab="dashboardTab">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        Metabolic Dashboard
+      </button>
+      <button class="tab-btn" data-tab="dietLoggerTab">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+        Indian Diet Logger
+      </button>
+      <button class="tab-btn" data-tab="mcpAiTab">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10H12V2z"></path><path d="M12 12L2.5 7.5"></path></svg>
+        MCP AI Diet Evaluation
+      </button>
+    </nav>
+
+    <!-- TAB 1: METABOLIC DASHBOARD -->
+    <section class="tab-content active" id="dashboardTab">
+      <div class="grid-layout">
+        
+        <!-- Visceral Fat & MASLD Risk Gauge Card -->
+        <div class="card glass-card gauge-card">
+          <div class="card-header">
+            <h3>Visceral Fat & MASLD Risk Score</h3>
+            <span class="risk-badge badge-amber" id="visceralRiskBadge">Moderate Risk</span>
+          </div>
+
+          <div class="gauge-container">
+            <svg class="gauge-svg" viewBox="0 0 200 120">
+              <!-- Background Arc -->
+              <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="18" stroke-linecap="round"/>
+              <!-- Green Zone -->
+              <path d="M 20 100 A 80 80 0 0 1 65 37" fill="none" stroke="#10b981" stroke-width="18" stroke-linecap="round"/>
+              <!-- Amber Zone -->
+              <path d="M 65 37 A 80 80 0 0 1 135 37" fill="none" stroke="#f59e0b" stroke-width="18"/>
+              <!-- Crimson Zone -->
+              <path d="M 135 37 A 80 80 0 0 1 180 100" fill="none" stroke="#ef4444" stroke-width="18" stroke-linecap="round"/>
+              <!-- Needle Pointer -->
+              <line id="gaugeNeedle" x1="100" y1="100" x2="60" y2="40" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="100" cy="100" r="8" fill="#ffffff"/>
+            </svg>
+            <div class="gauge-score-display">
+              <span class="score-value" id="gaugeScoreVal">58</span>
+              <span class="score-max">/ 100</span>
+            </div>
+          </div>
+
+          <div class="risk-metrics-grid">
+            <div class="metric-item">
+              <span class="metric-label">South Asian BMI</span>
+              <span class="metric-val" id="dashBmiVal">24.2 kg/m²</span>
+              <span class="metric-sub status-warning" id="dashBmiCat">Overweight (≥23 cutoff)</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label">Waist Circumference</span>
+              <span class="metric-val" id="dashWaistVal">94 cm</span>
+              <span class="metric-sub status-danger" id="dashWaistCat">Elevated (>90 cm cutoff)</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label">MASLD Probability</span>
+              <span class="metric-val" id="dashMasldVal">49%</span>
+              <span class="metric-sub">Hepatic Fat Risk</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Macro Rings & Daily Nutrition Breakdown -->
+        <div class="card glass-card macros-card">
+          <div class="card-header">
+            <h3>Daily Macro Balance</h3>
+            <span class="macro-target-tag">Target Ratio 2:1 (Carb:Protein)</span>
+          </div>
+
+          <div class="macro-rings-wrapper">
+            <!-- SVG Progress Rings -->
+            <div class="rings-svg-container">
+              <svg viewBox="0 0 160 160" class="macro-ring-svg">
+                <!-- Carbohydrate Ring -->
+                <circle cx="80" cy="80" r="66" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="12"/>
+                <circle id="carbRingCircle" cx="80" cy="80" r="66" fill="none" stroke="#f59e0b" stroke-width="12" 
+                        stroke-dasharray="414.6" stroke-dashoffset="140" stroke-linecap="round" transform="rotate(-90 80 80)"/>
+                
+                <!-- Protein Ring -->
+                <circle cx="80" cy="80" r="48" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="10"/>
+                <circle id="proteinRingCircle" cx="80" cy="80" r="48" fill="none" stroke="#10b981" stroke-width="10" 
+                        stroke-dasharray="301.5" stroke-dashoffset="120" stroke-linecap="round" transform="rotate(-90 80 80)"/>
+              </svg>
+              <div class="rings-center-text">
+                <span class="center-calories" id="totalCalCount">1,480</span>
+                <span class="center-label">kcal logged</span>
+              </div>
+            </div>
+
+            <!-- Legend & Values -->
+            <div class="macro-legend-list">
+              <div class="legend-item">
+                <div class="legend-dot dot-amber"></div>
+                <div class="legend-details">
+                  <span class="legend-name">Carbohydrate Load</span>
+                  <strong class="legend-val" id="totalCarbsVal">182g</strong>
+                </div>
+              </div>
+
+              <div class="legend-item">
+                <div class="legend-dot dot-emerald"></div>
+                <div class="legend-details">
+                  <span class="legend-name">Protein Intake</span>
+                  <strong class="legend-val" id="totalProteinVal">48g</strong>
+                </div>
+              </div>
+
+              <div class="legend-item">
+                <div class="legend-dot dot-crimson"></div>
+                <div class="legend-details">
+                  <span class="legend-name">Hidden Fats (Ghee/Vanaspati)</span>
+                  <strong class="legend-val" id="totalHiddenFatsVal">18g</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Desired Weight Goal & South Asian Caloric Deficit Tracker -->
+      <div class="card glass-card weight-goal-card" style="margin-bottom: 1.5rem;">
+        <div class="card-header">
+          <div>
+            <h3>Desired Target Weight & Metabolic Calorie Budget</h3>
+            <p class="subtitle">Personalized 400 kcal/day deficit tailored for South Asian metabolic velocity</p>
+          </div>
+          <span class="risk-badge badge-emerald" id="goalStatusBadge">14-Week Timeline</span>
+        </div>
+
+        <div class="goal-tracker-grid">
+          <!-- Weight Progress Gauge Bar -->
+          <div class="goal-progress-box">
+            <div class="goal-metrics-top">
+              <div>
+                <span class="goal-sub-title">Current Weight</span>
+                <strong class="goal-val-lg" id="goalCurrentWeight">78.5 kg</strong>
+              </div>
+              <div class="goal-arrow">➔</div>
+              <div>
+                <span class="goal-sub-title">Target Desired Weight</span>
+                <strong class="goal-val-lg highlight-emerald" id="goalTargetWeight">68.0 kg</strong>
+              </div>
+            </div>
+
+            <!-- Visual Progress Bar -->
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill" id="weightProgressBarFill" style="width: 35%;"></div>
+            </div>
+            <div class="progress-bar-labels">
+              <span id="weightDeltaLabel">Loss Target: -10.5 kg</span>
+              <span id="targetBmiLabel">Target BMI: 22.98 kg/m² (Normal Range)</span>
+            </div>
+
+            <!-- Live Interactive Weight Slider Control -->
+            <div class="live-slider-group">
+              <div class="slider-header-row">
+                <label for="rangeTargetWeight">Drag to Adjust Desired Target Weight Live:</label>
+                <span class="live-slider-readout" id="liveSliderReadout">68.0 kg</span>
+              </div>
+              <input type="range" id="rangeTargetWeight" min="45.0" max="100.0" step="0.5" value="68.0" class="custom-range-slider">
+            </div>
+          </div>
+
+          <!-- Calorie & Carb Deficit Specs -->
+          <div class="goal-specs-grid">
+            <div class="goal-spec-item">
+              <span class="spec-label">Daily Calorie Target</span>
+              <strong class="spec-val" id="goalDailyCalorie">1,540 kcal</strong>
+              <small class="spec-hint">-400 kcal deficit/day</small>
+            </div>
+
+            <div class="goal-spec-item">
+              <span class="spec-label">Carbohydrate Ceiling</span>
+              <strong class="spec-val status-warning" id="goalCarbCeiling">173g / day</strong>
+              <small class="spec-hint">45% macro limit for MASLD</small>
+            </div>
+
+            <div class="goal-spec-item">
+              <span class="spec-label">Est. Weight Loss Pace</span>
+              <strong class="spec-val" id="goalPaceVal">0.65 kg / week</strong>
+              <small class="spec-hint">Safe South Asian rate</small>
+            </div>
+
+            <div class="goal-spec-item">
+              <span class="spec-label">Estimated Completion</span>
+              <strong class="spec-val status-emerald" id="goalEstWeeks">17 Weeks</strong>
+              <small class="spec-hint">Continuous adherence</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Human Body Fat Distribution Map Card -->
+      <div class="card glass-card body-fat-card" style="margin-bottom: 1.5rem;">
+        <div class="card-header">
+          <div>
+            <h3>Anatomical Body Fat & Visceral Accumulation Map</h3>
+            <p class="subtitle">South Asian Phenotype: High visceral/hepatic fat despite lower BMI</p>
+          </div>
+          <span class="risk-badge badge-amber" id="bodyFatBadge">28.4% Body Fat</span>
+        </div>
+
+        <div class="body-fat-layout">
+          <!-- Human Body SVG Silhouette with Glowing Visceral Core -->
+          <div class="body-svg-wrapper">
+            <svg viewBox="0 0 160 300" class="human-body-svg">
+              <!-- Head & Neck -->
+              <circle cx="80" cy="32" r="18" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+              <path d="M 74 50 L 74 60 L 86 60 L 86 50 Z" fill="rgba(255,255,255,0.12)"/>
+              
+              <!-- Torso Silhouette -->
+              <path d="M 50 60 C 45 75, 42 110, 52 165 C 55 180, 58 190, 58 200 L 102 200 C 102 190, 105 180, 108 165 C 118 110, 115 75, 110 60 Z" 
+                    fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+
+              <!-- Arms -->
+              <path d="M 48 62 L 32 130 C 30 145, 28 160, 25 175" stroke="rgba(255,255,255,0.2)" stroke-width="8" stroke-linecap="round" fill="none"/>
+              <path d="M 112 62 L 128 130 C 130 145, 132 160, 135 175" stroke="rgba(255,255,255,0.2)" stroke-width="8" stroke-linecap="round" fill="none"/>
+
+              <!-- Legs -->
+              <path d="M 64 200 L 60 280" stroke="rgba(255,255,255,0.2)" stroke-width="14" stroke-linecap="round" fill="none"/>
+              <path d="M 96 200 L 100 280" stroke="rgba(255,255,255,0.2)" stroke-width="14" stroke-linecap="round" fill="none"/>
+
+              <!-- DYNAMIC GLOWING VISCERAL FAT CORE (Abdominal & Liver Region) -->
+              <ellipse id="visceralFatGlowCore" cx="80" cy="128" rx="22" ry="24" 
+                       fill="rgba(245, 158, 11, 0.45)" stroke="#f59e0b" stroke-width="2.5" class="pulse-glow"/>
+
+              <!-- Subcutaneous Hip/Thigh Fat Layer -->
+              <path id="subcutaneousFatLayer" d="M 52 145 C 48 165, 54 185, 80 185 C 106 185, 112 165, 108 145 Z" 
+                    fill="rgba(16, 185, 129, 0.25)" stroke="#10b981" stroke-width="1.5"/>
+
+              <!-- Pulsing Anatomical Hotspot Dots -->
+              <circle cx="80" cy="120" r="5" fill="#ef4444" class="pulse-dot"/>
+              <text x="80" y="102" text-anchor="middle" fill="#ffffff" font-size="8" font-weight="bold">Visceral Core (MASLD Risk)</text>
+            </svg>
+          </div>
+
+          <!-- Regional Body Fat Distribution Stats & Legend -->
+          <div class="body-fat-stats">
+            <div class="fat-stat-box highlight-stat">
+              <div class="stat-top">
+                <span class="stat-title">Estimated Total Body Fat</span>
+                <strong class="stat-number" id="totalBfPercentVal">28.4%</strong>
+              </div>
+              <p class="stat-desc">Calculated via South Asian modified anthropometric parameters.</p>
+            </div>
+
+            <div class="fat-stat-grid">
+              <div class="fat-stat-item">
+                <span class="stat-label">Visceral Fat Rating</span>
+                <strong class="stat-value status-warning" id="visceralLevelVal">Level 11 / 20</strong>
+                <small class="stat-hint">Cutoff: &gt;9 indicates elevated intra-abdominal fat</small>
+              </div>
+
+              <div class="fat-stat-item">
+                <span class="stat-label">Visceral Organ Fat</span>
+                <strong class="stat-value" id="visceralMassVal">9.8 kg</strong>
+                <small class="stat-hint">Fat surrounding Liver &amp; Pancreas</small>
+              </div>
+
+              <div class="fat-stat-item">
+                <span class="stat-label">Subcutaneous Fat</span>
+                <strong class="stat-value" id="subcutaneousMassVal">12.4 kg</strong>
+                <small class="stat-hint">Fat under skin (Lower risk)</small>
+              </div>
+
+              <div class="fat-stat-item">
+                <span class="stat-label">Fat Distribution Ratio</span>
+                <strong class="stat-value status-danger" id="vatSatRatioVal">0.79 VAT/SAT</strong>
+                <small class="stat-hint">High abdominal centrality</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Visceral Fat Targeting Exercise Prescriptions -->
+      <div class="card glass-card exercises-section">
+        <div class="card-header">
+          <div>
+            <h3>Visceral-Fat Targeting Exercises & Action Steps</h3>
+            <p class="subtitle">Click any exercise card below to view step-by-step "What to Do" instructions</p>
+          </div>
+          <span class="protocol-tag">Clinical Guidelines</span>
+        </div>
+
+        <div class="exercises-grid" id="exerciseGrid">
+          <!-- Dynamically Rendered with clickable cards -->
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: DIET LOGGER -->
+    <section class="tab-content" id="dietLoggerTab">
+      <div class="grid-layout diet-grid">
+        
+        <!-- Food Search & Quantity Selector -->
+        <div class="card glass-card logger-input-card">
+          <div class="card-header">
+            <h3>Search Indian Food Database</h3>
+            <span class="subtitle">Standardized by Indian Household Measures</span>
+          </div>
+
+          <div class="search-box">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="foodSearchInput" placeholder="Search Roti, Paneer, Dosa, Dal Tadka..." autocomplete="off">
+          </div>
+
+          <!-- Cuisine Filter Buttons -->
+          <div class="cuisine-chips">
+            <button class="chip active" data-cuisine="All">All</button>
+            <button class="chip" data-cuisine="North">North</button>
+            <button class="chip" data-cuisine="South">South</button>
+            <button class="chip" data-cuisine="East">East</button>
+            <button class="chip" data-cuisine="West">West</button>
+          </div>
+
+          <!-- Auto-suggest Results Dropdown -->
+          <div class="food-suggest-results" id="foodSearchResults">
+            <!-- Populated via API search -->
+          </div>
+
+          <!-- Selected Item Form -->
+          <div class="selected-food-panel hidden" id="selectedFoodPanel">
+            <div class="selected-header">
+              <h4 id="selFoodName">Paneer Butter Masala</h4>
+              <span class="measure-tag" id="selFoodMeasure">1 katori (150ml)</span>
+            </div>
+
+            <div class="macro-mini-pills">
+              <span class="pill pill-carbs" id="selFoodCarbs">10g Carbs</span>
+              <span class="pill pill-protein" id="selFoodProteins">9.5g Protein</span>
+              <span class="pill pill-fats" id="selFoodFats">24g Fats</span>
+              <span class="pill pill-hidden" id="selFoodHidden">12g Hidden Fat</span>
+            </div>
+
+            <!-- Indian Household Measure Selector -->
+            <div class="portion-selector-group">
+              <label>Household Quantity Multiplier:</label>
+              <div class="quantity-stepper">
+                <button class="step-btn" id="stepMinusBtn">-</button>
+                <input type="number" id="portionQtyInput" value="1.0" step="0.5" min="0.5" max="10.0">
+                <button class="step-btn" id="stepPlusBtn">+</button>
+                <span class="portion-unit-label" id="portionUnitText">katori / bowl</span>
+              </div>
+            </div>
+
+            <div class="meal-type-selector">
+              <label>Meal Time:</label>
+              <select id="mealTypeSelect">
+                <option value="Breakfast">Breakfast</option>
+                <option value="Lunch" selected>Lunch</option>
+                <option value="Dinner">Dinner</option>
+                <option value="Snack">Snack</option>
+              </select>
+            </div>
+
+            <button class="btn btn-primary btn-block" id="logMealBtn">
+              Log Meal Entry
+            </button>
+          </div>
+        </div>
+
+        <!-- Logged Daily Meals Timeline -->
+        <div class="card glass-card timeline-card">
+          <div class="card-header">
+            <h3>Today's Logged Meals</h3>
+            <button class="btn btn-sm btn-outline" id="refreshLogsBtn">Refresh</button>
+          </div>
+
+          <div class="logs-timeline" id="logsTimelineList">
+            <!-- Dynamically populated meal items -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 3: MCP AI DIET EVALUATION -->
+    <section class="tab-content" id="mcpAiTab">
+      <div class="card glass-card mcp-card">
+        <div class="card-header">
+          <div>
+            <h3>Model Context Protocol (MCP) Diet Evaluation</h3>
+            <p class="subtitle">Simulate AI Agent clinical evaluation of South Asian metabolic diet logs</p>
+          </div>
+          <button class="btn btn-primary" id="triggerMcpBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+            Run MCP Evaluation
+          </button>
+        </div>
+
+        <div class="mcp-results-container" id="mcpResultsBox">
+          <div class="mcp-empty-state">
+            <div class="ai-brain-icon">🤖</div>
+            <h4>Ready for MCP AI Analysis</h4>
+            <p>Click 'Run MCP Evaluation' to execute context-aware dietary analysis on logged Indian food items.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ONBOARDING MODAL -->
+  <div class="modal-overlay hidden" id="onboardingModal">
+    <div class="modal-card glass-card">
+      <div class="modal-header">
+        <h3>South Asian Metabolic Baseline Registration</h3>
+        <button class="modal-close" id="closeModalBtn">✕</button>
+      </div>
+
+      <form id="onboardingForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="obName" required placeholder="e.g. Rajesh Kumar" value="Rajesh Kumar">
+          </div>
+
+          <div class="form-group">
+            <label>Age</label>
+            <input type="number" id="obAge" required min="18" max="100" value="42">
+          </div>
+
+          <div class="form-group">
+            <label>Gender</label>
+            <select id="obGender">
+              <option value="Male" selected>Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Height (cm)</label>
+            <input type="number" id="obHeight" required min="100" max="230" value="172">
+          </div>
+
+          <div class="form-group">
+            <label>Current Weight (kg)</label>
+            <input type="number" id="obWeight" required step="0.5" min="30" max="200" value="78.5">
+          </div>
+
+          <div class="form-group">
+            <label>Desired Target Weight (kg)</label>
+            <input type="number" id="obTargetWeight" required step="0.5" min="30" max="200" value="68.0">
+            <small class="help-text">Goal weight to calculate calorie & carb deficit</small>
+          </div>
+
+          <div class="form-group">
+            <label>Waist Circumference (cm)</label>
+            <input type="number" id="obWaist" required step="0.5" min="40" max="180" value="94.0">
+            <small class="help-text">South Asian cutoff: Male >90cm, Female >80cm</small>
+          </div>
+
+          <div class="form-group">
+            <label>Fasting Blood Sugar (mg/dL)</label>
+            <input type="number" id="obFastingSugar" step="1" placeholder="Optional" value="112">
+          </div>
+
+          <div class="form-group">
+            <label>HbA1c (%)</label>
+            <input type="number" id="obHba1c" step="0.1" placeholder="Optional" value="6.1">
+          </div>
+
+          <div class="form-group checkbox-group span-2">
+            <label class="checkbox-label">
+              <input type="checkbox" id="obFamilyDiabetes" checked>
+              Family history of Type-2 Diabetes
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="obKnownMasld">
+              Known diagnosis of Fatty Liver (MASLD/NAFLD)
+            </label>
+          </div>
+        </div>
+
+        <!-- Real-time BMI Preview Box -->
+        <div class="bmi-preview-box" id="bmiPreviewBox">
+          <span class="preview-title">South Asian Adjusted BMI Preview</span>
+          <div class="preview-val-row">
+            <strong id="previewBmiVal">26.54 kg/m²</strong>
+            <span class="risk-badge badge-crimson" id="previewBmiBadge">Obese (≥25.0)</span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Save Baseline & Compute Risk</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- EXERCISE DETAIL MODAL ("WHAT TO DO") -->
+  <div class="modal-overlay hidden" id="exerciseModal">
+    <div class="modal-card glass-card exercise-modal-card">
+      <div class="modal-header">
+        <div>
+          <h3 id="exModalTitle">High-Intensity Interval Training</h3>
+          <span class="exercise-meta" id="exModalMeta">20-25 mins (3x/week) • High Intensity</span>
+        </div>
+        <button class="modal-close" id="closeExModalBtn">✕</button>
+      </div>
+
+      <div class="ex-modal-body">
+        <!-- Interactive Visual Video Demonstration Player -->
+        <div class="video-player-container">
+          <div class="video-header">
+            <span class="video-tag">📹 Interactive Movement Video Guide</span>
+            <span class="video-title" id="exVideoTitle">20-Min Visceral Fat HIIT Burn Protocol</span>
+          </div>
+          <div class="video-frame-wrapper">
+            <video id="exVideoPlayer" controls loop muted playsinline poster="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=600&q=80">
+              <source id="exVideoSource" src="https://assets.mixkit.co/videos/preview/mixkit-woman-doing-jumping-jacks-in-a-gym-41381-large.mp4" type="video/mp4">
+              Your browser does not support HTML5 video playback.
+            </video>
+          </div>
+          <!-- Interactive Video Control Toolbar -->
+          <div class="video-controls-toolbar">
+            <button class="v-btn" id="vPlayPauseBtn">▶ Play Demo</button>
+            <button class="v-btn" id="vSpeedBtn">⚡ Speed 1.0x</button>
+            <button class="v-btn" id="vLoopBtn">🔁 Loop ON</button>
+          </div>
+        </div>
+
+        <div class="ex-timing-badge" id="exModalTiming">
+          <strong>Recommended Timing & Frequency:</strong> Mon / Wed / Fri • Morning or Early Evening
+        </div>
+
+        <div class="ex-section">
+          <h4>📋 What to Do (Step-by-Step Instructions)</h4>
+          <ol class="step-by-step-list" id="exModalSteps">
+            <!-- Dynamically populated -->
+          </ol>
+        </div>
+
+        <div class="ex-section">
+          <h4>🩺 Clinical Rationale for South Asian Genetics</h4>
+          <p class="clinical-text" id="exModalRationale">HIIT preferentially burns visceral adipose tissue (VAT) surrounding liver and pancreatic organs.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
