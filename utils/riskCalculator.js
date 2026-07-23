@@ -97,9 +97,23 @@ function calculateComprehensiveMetabolicRisk(params) {
     else if (fasting_blood_sugar_mg_dl >= 100) visceralFatScore += 15;
   }
 
-  // 4. Family History & Known MASLD (up to +15 points)
-  if (family_history_diabetes) visceralFatScore += 8;
-  if (known_masld) visceralFatScore += 15;
+  // Cap score between 0 and 100
+  visceralFatScore = Math.min(100, Math.max(5, visceralFatScore));
+
+  // MASLD Probability Calculation (%)
+  let masldProbability = Math.round(visceralFatScore * 0.85);
+  if (known_masld) masldProbability = Math.max(90, masldProbability);
+
+  // Determine Risk Category
+  let riskLevel = 'Low';
+  let riskBadgeColor = 'emerald';
+  if (visceralFatScore >= 70) {
+    riskLevel = 'High';
+    riskBadgeColor = 'crimson';
+  } else if (visceralFatScore >= 45) {
+    riskLevel = 'Moderate';
+    riskBadgeColor = 'amber';
+  }
 
   // South Asian Body Fat % & Visceral Fat Area Calculation
   const age = params.age || 40;
